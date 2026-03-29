@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio – Freelance & Consultant</title>
+  <style>
+    :root {
+      --primary: #6c63ff;
+      --dark: #1a1a2e;
+      --gray: #f5f5f7;
+      --text: #333;
+      --muted: #888;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      color: var(--text);
+      background: #fff;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      height: 64px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--primary); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+      background: linear-gradient(135deg, #f8f8ff 0%, #ede9ff 100%);
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero-content h1 span { color: var(--primary); }
+
+    .hero-content p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 18px rgba(108,99,255,0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(108,99,255,0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      box-shadow: none;
+      margin-left: 12px;
+    }
+
+    .btn-outline:hover { background: var(--primary); color: #fff; }
+
+    .avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #a89cff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      margin: 0 auto 28px;
+      box-shadow: 0 8px 32px rgba(108,99,255,0.25);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 24px; }
+
+    .section-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 1.9rem;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--gray); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+    }
+
+    .card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── PROJETS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+
+    .project-card:hover { transform: translateY(-4px); }
+
+    .project-thumb {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .project-body { padding: 20px; }
+
+    .project-body h3 { color: var(--dark); margin-bottom: 6px; }
+
+    .project-body p { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+    .tag {
+      background: #ede9ff;
+      color: var(--primary);
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* ── TEMOIGNAGES ── */
+    #testimonials { background: var(--gray); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .testimonial {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .stars { color: #f0b429; font-size: 1.1rem; margin-bottom: 12px; }
+
+    .testimonial p { font-style: italic; color: #555; line-height: 1.7; margin-bottom: 16px; }
+
+    .testimonial-author { font-weight: 600; color: var(--dark); font-size: 0.9rem; }
+    .testimonial-role { font-size: 0.82rem; color: var(--muted); }
+
+    /* ── CONTACT ── */
+    #contact form {
+      display: grid;
+      gap: 16px;
+      max-width: 540px;
+    }
+
+    #contact input,
+    #contact textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    #contact input:focus,
+    #contact textarea:focus { border-color: var(--primary); }
+
+    #contact textarea { min-height: 140px; }
+
+    #contact button {
+      justify-self: start;
+      padding: 14px 36px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    #contact button:hover { background: #574fd6; transform: translateY(-2px); }
+
+    .contact-info {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .contact-item { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.95rem; }
+    .contact-item span:first-child { font-size: 1.3rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: #aaa;
+      text-align: center;
+      padding: 24px;
+      font-size: 0.88rem;
+    }
+
+    footer span { color: var(--primary); }
+
+    /* ── MSG CONFIRMATION ── */
+    .msg-ok {
+      display: none;
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      nav ul { display: none; }
+      .btn-outline { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Mon Portfolio</div>
+    <ul>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#projects">Projets</a></li>
+      <li><a href="#testimonials">Avis</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="avatar">👤</div>
+      <h1>Bonjour, je suis<br><span>Votre Nom</span></h1>
+      <p>Consultant freelance spécialisé dans l'accompagnement des entreprises vers la performance et la croissance.</p>
+      <a href="#contact" class="btn">Me contacter</a>
+      <a href="#projects" class="btn btn-outline">Voir mes projets</a>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-inner">
+      <h2 class="section-title">Mes Services</h2>
+      <p class="section-sub">Ce que je peux faire pour vous</p>
+      <div class="services-grid">
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <h3>Conseil Stratégique</h3>
+          <p>Accompagnement dans la définition de votre vision et de votre feuille de route business.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3>Analyse & Reporting</h3>
+          <p>Mise en place de tableaux de bord et indicateurs pour piloter votre activité.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚀</div>
+          <h3>Gestion de Projet</h3>
+          <p>Coordination et livraison de projets complexes dans les délais et budgets impartis.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <h3>Formation & Coaching</h3>
+          <p>Sessions de formation sur-mesure pour monter en compétences vos équipes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJETS -->
+  <section id="projects">
+    <div class="section-inner">
+      <h2 class="section-title">Projets Réalisés</h2>
+      <p class="section-sub">Quelques missions dont je suis fier</p>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-thumb" style="background: linear-gradient(135deg,#ede9ff,#c7c0ff)">💼</div>
+          <div class="project-body">
+            <h3>Transformation digitale</h3>
+            <p>Accompagnement d'une PME de 80 personnes dans sa transition numérique sur 12 mois.</p>
+            <div class="tags"><span class="tag">Stratégie</span><span class="tag">Digital</span></div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-thumb" style="background: linear-gradient(135deg,#e8f5e9,#a5d6a7)">📈</div>
+          <div class="project-body">
+            <h3>Optimisation des coûts</h3>
+            <p>Réduction de 25% des coûts opérationnels pour un client dans le secteur logistique.</p>
+            <div class="tags"><span class="tag">Finance</span><span class="tag">Opérations</span></div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-thumb" style="background: linear-gradient(135deg,#fff8e1,#ffe082)">🌍</div>
+          <div class="project-body">
+            <h3>Expansion internationale</h3>
+            <p>Étude de marché et plan d'entrée sur 3 nouveaux marchés européens.</p>
+            <div class="tags"><span class="tag">International</span><span class="tag">Conseil</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEMOIGNAGES -->
+  <section id="testimonials">
+    <div class="section-inner">
+      <h2 class="section-title">Ce que disent mes clients</h2>
+      <p class="section-sub">Des retours authentiques</p>
+      <div class="testimonials-grid">
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>"Un consultant exceptionnel, très à l'écoute et avec des recommandations vraiment actionnables. Je recommande vivement."</p>
+          <div class="testimonial-author">Sophie M.</div>
+          <div class="testimonial-role">Directrice Générale, TechCorp</div>
+        </div>
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>"Grâce à son accompagnement, nous avons restructuré notre organisation et amélioré nos performances de 40%."</p>
+          <div class="testimonial-author">Marc L.</div>
+          <div class="testimonial-role">COO, StartupXYZ</div>
+        </div>
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>"Professionnalisme, réactivité et expertise. Notre collaboration a été un vrai accélérateur pour notre croissance."</p>
+          <div class="testimonial-author">Amélie D.</div>
+          <div class="testimonial-role">Fondatrice, AgencePlus</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <h2 class="section-title">Me Contacter</h2>
+      <p class="section-sub">Discutons de votre projet</p>
+
+      <div class="contact-info">
+        <div class="contact-item"><span>📧</span><span>votre@email.com</span></div>
+        <div class="contact-item"><span>📞</span><span>+33 6 00 00 00 00</span></div>
+        <div class="contact-item"><span>📍</span><span>Paris, France</span></div>
+      </div>
+
+      <form onsubmit="handleSubmit(event)">
+        <input type="text" placeholder="Votre nom" required />
+        <input type="email" placeholder="Votre email" required />
+        <input type="text" placeholder="Sujet" required />
+        <textarea placeholder="Votre message..."></textarea>
+        <button type="submit">Envoyer le message</button>
+        <div class="msg-ok" id="msgOk">Message envoyé ! Je vous répondrai rapidement.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2024 <span>Votre Nom</span> · Freelance & Consultant · Fait avec ❤️</p>
+  </footer>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const msg = document.getElementById('msgOk');
+      msg.style.display = 'block';
+      e.target.reset();
+      setTimeout(() => msg.style.display = 'none', 5000);
+    }
+  </script>
+</body>
+</html>
