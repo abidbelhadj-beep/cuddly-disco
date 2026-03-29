@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo List</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px;
+    }
+
+    .app {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 480px;
+      padding: 32px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #1a1a2e;
+      margin-bottom: 24px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .input-row input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-row input:focus {
+      border-color: #6c63ff;
+    }
+
+    .input-row button {
+      padding: 10px 18px;
+      background: #6c63ff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .input-row button:hover {
+      background: #574fd6;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .filters button {
+      flex: 1;
+      padding: 6px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #555;
+      transition: all 0.2s;
+    }
+
+    .filters button.active {
+      border-color: #6c63ff;
+      color: #6c63ff;
+      font-weight: 600;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+      animation: slideIn 0.2s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    li input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #6c63ff;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    li span {
+      flex: 1;
+      font-size: 1rem;
+      color: #333;
+      word-break: break-word;
+    }
+
+    li.done span {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+    li button.delete {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    li button.delete:hover {
+      color: #e74c3c;
+    }
+
+    .footer {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    .footer button {
+      background: none;
+      border: none;
+      color: #e74c3c;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .footer button:hover {
+      text-decoration: underline;
+    }
+
+    .empty {
+      text-align: center;
+      color: #bbb;
+      padding: 32px 0;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Ma Todo List</h1>
+
+    <div class="input-row">
+      <input type="text" id="taskInput" placeholder="Nouvelle tâche..." />
+      <button onclick="addTask()">Ajouter</button>
+    </div>
+
+    <div class="filters">
+      <button class="active" onclick="setFilter('all', this)">Toutes</button>
+      <button onclick="setFilter('active', this)">À faire</button>
+      <button onclick="setFilter('done', this)">Terminées</button>
+    </div>
+
+    <ul id="taskList"></ul>
+
+    <div class="footer">
+      <span id="counter"></span>
+      <button onclick="clearDone()">Supprimer terminées</button>
+    </div>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    let filter = 'all';
+
+    function save() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function render() {
+      const list = document.getElementById('taskList');
+      const filtered = tasks.filter(t =>
+        filter === 'all' ? true :
+        filter === 'done' ? t.done :
+        !t.done
+      );
+
+      list.innerHTML = '';
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty">Aucune tâche ici</div>';
+      } else {
+        filtered.forEach((task, i) => {
+          const realIndex = tasks.indexOf(task);
+          const li = document.createElement('li');
+          if (task.done) li.classList.add('done');
+          li.innerHTML = `
+            <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggle(${realIndex})" />
+            <span>${escapeHtml(task.text)}</span>
+            <button class="delete" onclick="remove(${realIndex})" title="Supprimer">&#x2715;</button>
+          `;
+          list.appendChild(li);
+        });
+      }
+
+      const remaining = tasks.filter(t => !t.done).length;
+      document.getElementById('counter').textContent =
+        `${remaining} tâche${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''}`;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const text = input.value.trim();
+      if (!text) return;
+      tasks.push({ text, done: false });
+      input.value = '';
+      save();
+      render();
+    }
+
+    function toggle(index) {
+      tasks[index].done = !tasks[index].done;
+      save();
+      render();
+    }
+
+    function remove(index) {
+      tasks.splice(index, 1);
+      save();
+      render();
+    }
+
+    function clearDone() {
+      tasks = tasks.filter(t => !t.done);
+      save();
+      render();
+    }
+
+    function setFilter(value, btn) {
+      filter = value;
+      document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    }
+
+    document.getElementById('taskInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') addTask();
+    });
+
+    render();
+  </script>
+</body>
+</html>
